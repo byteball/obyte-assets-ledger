@@ -2,15 +2,17 @@
 
 General Notes and System Requirements
 
-## System Requirements for Full Node
+## System Requirements
+
+### Full Node
 * 1 CPU
 * 4 GB RAM 
-* 70+ GB SSD
+* 70+ GB SSD (additional ~15 GB per year)
 
-## System Requirements for Light Node
+### Light Node
 * 1 CPU
-* 1 GB RAM 
-* 100 MB HDD
+* 512 MB RAM 
+* 1 GB HDD (NodeJs + dependencies + database)
 
 ## Install Node js v10 or v12 on Ubuntu
 ```bash
