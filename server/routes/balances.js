@@ -17,9 +17,15 @@ router.get('/:address', async (req, res) => {
 		const address = req.params.address;
 		if (!ValidationUtils.isValidAddress(address)) return [];
 
+		/*
 		var assets = await db.query(
 			`SELECT a.unit FROM outputs AS o, assets AS a
 			WHERE o.address = ? AND a.unit = o.unit `,
+			[firstAddress]);
+		*/
+		var assets = await db.query(
+			`SELECT a.unit FROM assets AS a, unit_authors AS u
+			WHERE u.address = ? AND a.unit = u.unit`,
 			[firstAddress]);
 
 		var moreAssets = conf.allowedExternalAssets.filter(unit => (unit && unit !== 'base'));

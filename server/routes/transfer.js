@@ -40,10 +40,17 @@ async function validate(data, txn, res) {
 			return sendError('Invalid Amount. Amount must be integer.', 400, res)
 		}
 		else if ( txn === 'burn' ) {
+			/*
 			var assetFound = await db.query(
 					`SELECT unit FROM outputs
 					WHERE address = ? AND unit = ? `,
 					[firstAddress, data.asset]);
+			*/
+			var assetFound = await db.query(
+				`SELECT a.unit FROM assets AS a, unit_authors AS u
+				WHERE u.address = ? AND u.unit = ? AND AND a.unit = u.unit`,
+				[firstAddress, data.asset]);			
+
 			if (assetFound.length === 0) {
 				return sendError('Invalid Asset. Not burnable asset.', 400, res)
 			}
