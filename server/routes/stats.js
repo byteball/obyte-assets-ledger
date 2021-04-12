@@ -40,12 +40,6 @@ router.get('/:asset?', async (req, res) => {
 				GROUP BY o.asset, o.address`, );
 		}
 		else {
-			/*
-			var assets = await db.query(
-				`SELECT a.unit FROM outputs AS o, assets AS a
-				WHERE o.address = ? AND a.unit = o.unit `,
-				[firstAddress]);
-			*/
 			var assets = await db.query(
 				`SELECT a.unit FROM assets AS a, unit_authors AS u
 				WHERE u.address = ? AND a.unit = u.unit`,
