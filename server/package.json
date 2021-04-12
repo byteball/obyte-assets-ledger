@@ -14,5 +14,8 @@
     "express": "^4.17.1",
     "headless-obyte": "git+https://github.com/byteball/headless-obyte.git",
     "ocore": "git+https://github.com/byteball/ocore.git"
+  },
+  "resolutions": {
+    "level-rocksdb": "^4.0.0"
   }
 }
