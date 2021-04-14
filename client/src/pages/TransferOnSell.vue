@@ -22,6 +22,14 @@
           <q-btn color="amber" dense label="Sell" class='q-mb-sm' @click.stop='sell' />
         </q-card-actions>
       </q-form >
+
+      <q-banner v-if='unitURL' dense inline-actions class="text-white bg-green-4"> 
+        Transferred. Unit:&nbsp;
+        <a :href="unitURL" style="color: white;" target="explorer">{{unit}}</a>
+        <template v-slot:action >
+          <q-btn flat icon='cancel' @click.stop='closeOKBanner'/>
+        </template>
+      </q-banner>
     </div>
 
   </q-page>
@@ -36,11 +44,14 @@ export default {
 
   data () {
     return {
-      title: 'Transfer on Sell',
+      title: 'Transfer Tokens on Sell',
       caption: 'Please select Obyte Asset, Obyte Address, Amount and click on Sell button to send tokens from specified address.',
       asset: null,
       customer: null,
       amount: null,
+      hwObyteNet: `https://${(process.env.DEV ? 'testnet': '')}explorer.obyte.org/#`,
+      unitURL: null,
+      unit: null,
     }
   },
 
@@ -52,15 +63,24 @@ export default {
         amount: this.amount
       }
       try {
+        this.unit = null 
+        this.unitURL = null
         const response = await api().post('transfer/sell/', payload)
         console.log('response: ', response)
         if (response.status === 201) {
-          let message = 'Transferred. Unit: ' + response.data.unit
-          notify.success(message)
+          //let message = 'Transferred. Unit: ' + response.data.unit
+          //notify.success(message)
+          this.unit = response.data.unit
+          this.unitURL = this.hwObyteNet + '/' + response.data.unit
         }
       }
       catch (err) { notify.processError(err) }
     },
+
+    closeOKBanner () {
+      this.unit = null 
+      this.unitURL = null
+    }
   },
 
   components: {

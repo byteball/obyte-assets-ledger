@@ -13,6 +13,7 @@ const routes = [
       { path: '/buy', component: () => import('pages/TransferOnBuy.vue') },
       { path: '/sell', component: () => import('pages/TransferOnSell.vue') },
       { path: '/move', component: () => import('pages/TransferOnMove.vue') },
+      { path: '/move-bytes', component: () => import('pages/TransferOnMoveBytes.vue') },
       { path: '/burn', component: () => import('pages/BurnTokens.vue') },
       { path: '/stats', component: () => import('pages/Stats.vue') },
       { path: '/balances', component: () => import('pages/Balances.vue') },

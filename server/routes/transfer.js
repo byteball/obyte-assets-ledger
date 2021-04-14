@@ -42,7 +42,7 @@ async function validate(data, txn, res) {
 		else if ( txn === 'burn' ) {
 			var assetFound = await db.query(
 				`SELECT a.unit FROM assets AS a, unit_authors AS u
-				WHERE u.address = ? AND u.unit = ? AND AND a.unit = u.unit`,
+				WHERE u.address = ? AND u.unit = ? AND a.unit = u.unit`,
 				[firstAddress, data.asset]);			
 
 			if (assetFound.length === 0) {
@@ -65,7 +65,7 @@ router.post('/buy/', async (req, res) => {
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
 			paying_addresses: [ changeAddress, firstAddress ],
 			fee_paying_addresses: [ changeAddress, firstAddress ],
-			change_address: changeAddress,
+			change_address: changeAddress,  
 			asset: data.asset,
 			to_address: data.address,
 			amount,
@@ -82,7 +82,8 @@ router.post('/buy/', async (req, res) => {
 			}
 		});
 	}
-	catch (err) { return sendError(err, 500, res) }
+	catch (err) { 
+		return sendError(err, 500, res) }
 })
 
 // ** Sell ** //
@@ -190,14 +191,17 @@ router.post('/burn/', async (req, res) => {
 
 // ** Move Bytes ** //
 router.post('/move-bytes/', async (req, res) => {
-	try {
-		if (!conf.payout_address) return sendError('conf.payout_address not defined', 500, res)
-
-		headlessWallet.sendAllBytes(conf.payout_address, null, function(err, unit){
-			if (err) return sendError(err, 500, res)
-			res.status(201);
-			res.send( {unit } )
-		});
+	try {	
+		headlessWallet.sendAllBytes(
+			conf.payout_address || firstAddress, 
+			null, 
+			function(err, unit) {
+				if (err) return sendError(err, 500, res)
+				res.status(201);
+				///res.send( {unit } )
+				res.send( {unit: unit} )
+			}
+		);
 	}
 	catch (err) { return sendError(err, 500, res) }
 })

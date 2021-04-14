@@ -9,7 +9,7 @@ exports.deviceName = 'Obyte Assets Ledger';
 exports.bIgnoreUnpairRequests = true;
 exports.bSingleAddress = false; // DO NOT CHANGE
 exports.bStaticChangeAddress = true; // DO NOT CHANGE
-exports.payout_address = ''; // where Bytes can be moved manually, consolidation moves automatically to change address.
+exports.payout_address = ''; // where Bytes can be moved manually.
 exports.allowedExternalAssets = []; // asset IDs on additional allowed assets.
 
 // emails

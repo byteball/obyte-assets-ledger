@@ -97,7 +97,7 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Transfer on Buy</q-item-label>
+            <q-item-label>Buy Tokens</q-item-label>
             <q-item-label caption>Transfer tokens to a customer</q-item-label>
           </q-item-section>
         </q-item>
@@ -107,7 +107,7 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Transfer on Sell</q-item-label>
+            <q-item-label>Sell Tokens</q-item-label>
             <q-item-label caption>Transfer tokens back to seller</q-item-label>
           </q-item-section>
         </q-item>
@@ -117,7 +117,7 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Transfer on Move</q-item-label>
+            <q-item-label>Move Tokens</q-item-label>
             <q-item-label caption>Transfer tokens between addresses</q-item-label>
           </q-item-section>
         </q-item>
@@ -129,6 +129,16 @@
           <q-item-section>
             <q-item-label>Burn Tokens</q-item-label>
             <q-item-label caption>Burn tokens</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable exact to="/move-bytes">
+          <q-item-section avatar>
+            <q-icon name="shopping_cart" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Move Bytes</q-item-label>
+            <q-item-label caption>Transfer Bytes from Change address</q-item-label>
           </q-item-section>
         </q-item>
 

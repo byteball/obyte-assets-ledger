@@ -4,19 +4,18 @@
 
     <div >
       <q-form @submit.prevent.stop='submitForm' >
-        <div class='row'>
-          <div style="width: 480px" class='q-mr-sm q-mb-sm q-ml-sm' v-if='customerWalletAddress' >
-            <q-input label="Customer Obyte Wallet Address" outlined dense readonly
-              v-model='customerWalletAddress'
-              :data.sync='customerWalletAddress' />
-          </div>
-
-        </div>
         <q-card-actions >
           <q-btn color="amber" dense label="Create Address" class='q-mb-sm'
             @click.stop='issueNextAddress' />
         </q-card-actions>
       </q-form >
+
+      <q-banner v-if='address' dense inline-actions class="text-white bg-green-4"> 
+        Address Created. New address: {{address}}
+        <template v-slot:action >
+          <q-btn flat icon='cancel' @click.stop='closeOKBanner'/>
+        </template>
+      </q-banner>
     </div>
 
   </q-page>
@@ -33,7 +32,7 @@ export default {
     return {
       title: 'Create Next Headless Wallet Address (customer address)',
       caption: 'Please click on Create Address button to issue next Obyte Headless Wallet Address.  The return address can be assigned to a customer.',
-      customerWalletAddress: null
+      address: null,
     }
   },
 
@@ -41,15 +40,20 @@ export default {
     async issueNextAddress () {
       try {
         this.customerWalletAddress = null
+        this.address = null 
         const response = await api().post('addresses/')
         console.log('response: ', response)
         if (response.status === 201) {
-          notify.success({ message: 'New Wallet address: ' + response.data.address });
-          this.customerWalletAddress = response.data.address
+          //notify.success({ message: 'New Wallet address: ' + response.data.address });
+          this.address = response.data.address
         }
       }
       catch (err) { notify.processError(err) }
     },
+
+    closeOKBanner () {
+      this.address = null 
+    }
   },
 
   components: {

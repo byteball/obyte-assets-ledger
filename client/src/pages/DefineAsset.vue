@@ -31,6 +31,14 @@
           <q-btn color="amber" dense label="Define Asset" class='q-mb-sm' @click.stop='defineAsset' />
         </q-card-actions>
       </q-form >
+
+      <q-banner v-if='unit' dense inline-actions class="text-white bg-green-4"> 
+        Asset defined. Asset Unit: {{unit}}
+        <template v-slot:action >
+          <q-btn flat icon='cancel' @click.stop='closeOKBanner'/>
+        </template>
+      </q-banner>
+
     </div>
 
   </q-page>
@@ -46,22 +54,31 @@ export default {
   data () {
     return {
       title: 'Define Asset',
-      caption: 'Please click on Define Asset button to define a new Obyte Asset. Remember to check that 1st address has funds.',
+      caption: 'Please click on Define Asset button to define a new Obyte Asset. '
+        + 'Remember to check that 1st address has funds. '
+        + 'If required, use Move Bytes API to transfer bytes from Change Address.',
+      unit: null,
     }
   },
 
   methods: {
     async defineAsset () {
       try {
+        this.unit = null
         const response = await api().post('assets/')
         if (response.status === 201) {
-          let message = 'Asset defined. Asset Unit Id: ' + response.data.unit
-          notify.success(message)
+          //let message = 'Asset defined. Asset Unit Id: ' + response.data.unit
+          //notify.success(message)
+          this.unit = response.data.unit
         }
       }
       catch (err) {
         notify.processError(err) }
     },
+
+    closeOKBanner () {
+      this.unit = null
+    }
   },
 
   components: {

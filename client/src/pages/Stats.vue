@@ -10,21 +10,22 @@
           <br />
           <div class='row' v-if='showTotals' >
             <q-badge class='q-mr-md' outline color="teal"
-              :label="(tokensIssued !== null ? tokensIssued : 'N/A') + ' Tokens Issued' " />
+              :label="(tokensIssued !== null ? tokensIssued : 'N/A') + ' ' + assetType + ' Issued' " />
             <q-badge class='q-mr-md' outline color="red"
-              :label="tokensOnFirstAddress + ' Tokens on 1st Address' " />
+              :label="tokensOnFirstAddress + ' ' + assetType + ' on 1st Address' " />
             <q-badge class='q-mr-md' outline color="orange"
-              :label="tokensOnChangeAddress + ' Tokens on Change Address' " />
+              :label="tokensOnChangeAddress + ' ' + assetType + ' on Change Address' " />
           </div>
           <div class='row q-mt-md' v-if='showTotals' >
             <q-badge class='q-mr-md' outline color="primary"
-              :label="tokensOnOtherAddresses + ' Tokens on Other Addresses' " />
+              :label="tokensOnOtherAddresses + ' ' + assetType + ' on Other Addresses' " />
             <q-badge class='q-mr-md' outline color="grey"
-              :label="(tokensOnExternalAddreses !== null ? tokensOnExternalAddreses : 'N/A') + ' Tokens on External Addresses' " />
+              :label="(tokensOnExternalAddreses !== null ? tokensOnExternalAddreses : 'N/A') 
+              + ' ' + assetType + ' on External Addresses' " />
           </div>
         </q-card-section>
 
-        <q-card-section style='max-width: 600px' v-if='showTotals' >
+        <q-card-section style='max-width: 600px' v-if=" showTotals && asset !== 'base' " >
           <q-table
             :data=' tokens_in_other_addresses '
             :columns=' tokens_in_other_addresses_view '
@@ -33,9 +34,6 @@
           </q-table>
         </q-card-section>
 
-        <q-card-actions align="left" v-if="asset==='base'">
-          <q-btn color="amber" dense label="Move Bytes" class='q-mb-sm' @click.stop='moveBytes' />
-        </q-card-actions>
       </q-form >
     </div>
   </q-page>
@@ -63,7 +61,8 @@ export default {
         { name: 'address', required: true, label: 'Obyte Headless Wallet Address', field: 'address', align: 'left', classes: 'mono' },
         { name: 'amount', label: 'Amount', field: 'amount', align: 'right', sortable: true },
       ],
-      tokens_in_other_addresses: []
+      tokens_in_other_addresses: [],
+      assetType: null
     }
   },
 
@@ -109,6 +108,8 @@ export default {
 
   watch: {
     asset: function () {
+        if (this.asset === 'base') this.assetType = 'Bytes'
+        else this.assetType = 'Tokens'
         this.tokenTotals()
     }
   },

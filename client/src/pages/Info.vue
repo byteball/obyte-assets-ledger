@@ -14,7 +14,7 @@
         <q-table
           :data=' state '
           :columns=' state_view '
-          :rows-per-page-options="[10]"
+          :rows-per-page-options="[11]"
         >
         </q-table>
       </q-card-section>
