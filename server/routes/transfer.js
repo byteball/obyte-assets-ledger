@@ -43,7 +43,7 @@ async function validate(data, txn, res) {
 			var assetFound = await db.query(
 				`SELECT a.unit FROM assets AS a, unit_authors AS u
 				WHERE u.address = ? AND u.unit = ? AND a.unit = u.unit`,
-				[firstAddress, data.asset]);			
+				[firstAddress, data.asset]);
 
 			if (assetFound.length === 0) {
 				return sendError('Invalid Asset. Not burnable asset.', 400, res)
@@ -65,7 +65,7 @@ router.post('/buy/', async (req, res) => {
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
 			paying_addresses: [ changeAddress, firstAddress ],
 			fee_paying_addresses: [ changeAddress, firstAddress ],
-			change_address: changeAddress,  
+			change_address: changeAddress,
 			asset: data.asset,
 			to_address: data.address,
 			amount,
@@ -82,7 +82,7 @@ router.post('/buy/', async (req, res) => {
 			}
 		});
 	}
-	catch (err) { 
+	catch (err) {
 		return sendError(err, 500, res) }
 })
 
@@ -191,10 +191,10 @@ router.post('/burn/', async (req, res) => {
 
 // ** Move Bytes ** //
 router.post('/move-bytes/', async (req, res) => {
-	try {	
+	try {
 		headlessWallet.sendAllBytes(
-			conf.payout_address || firstAddress, 
-			null, 
+			conf.payout_address || firstAddress,
+			null,
 			function(err, unit) {
 				if (err) return sendError(err, 500, res)
 				res.status(201);

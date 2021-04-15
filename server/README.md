@@ -16,7 +16,7 @@ The default configuration are loaded from conf.js files of dependencies ([ocore]
 	"bLight": true, // light node only keeps data related to headless wallet, full node gets all data and is faster
 	"hub": "relay.bytes.cash/bb", // peer to connect to (light node: gets data from, full node: finds initial peers from)
 	"bNoPassphrase": false, // forces to set private key encryption
-	"payout_address": "", // can be used to withdraw all Bytes or manually to consolidate Bytes
+	"payout_address": "", // can be used to withdraw all Bytes or manually consolidate Bytes to 1st address (if empty)
 	"allowedExternalAssets": [], // array of additional asset IDs to allow to be moves between accounts
 	"smtpTransport": "relay", // default is "local" to use sendmail
 	"smtpRelay": "smtp.mailtrap.io", // used only when smtpTransport is "relay"
@@ -28,7 +28,7 @@ The default configuration are loaded from conf.js files of dependencies ([ocore]
 	"admin_email": "test@example.com", // email address where to send check_daemon.js notifications
 	"socksHost": "127.0.0.1", // TOR proxy address
 	"socksPort": 9050, // port for TOR proxy
-	"MAX_UNSPENT_OUTPUTS": 0 // disables Bytes consolidation (default: 100)
+	"MAX_UNSPENT_OUTPUTS": 0 // disables Bytes consolidation to change address (default: 100)
 }
 ```
 
@@ -39,10 +39,10 @@ node server.js
 ```
 and type the passphrase and press ENTER, if prompted.
 
-## Documentation 
+## Documentation
 * [API documenation](https://natalie-seltzer.gitbook.io/obytetokens/)
 
 
 ## For more info on Obyte dependencies
-* [ocore](https://github.com/byteball/ocore/blob/master/README.md) 
-* [headless-obyte](https://github.com/byteball/headless-obyte/blob/master/README.md) 
+* [ocore](https://github.com/byteball/ocore/blob/master/README.md)
+* [headless-obyte](https://github.com/byteball/headless-obyte/blob/master/README.md)

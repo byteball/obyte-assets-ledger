@@ -134,11 +134,11 @@
 
         <q-item clickable exact to="/move-bytes">
           <q-item-section avatar>
-            <q-icon name="shopping_cart" />
+            <q-icon name="drive_file_move" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Move Bytes</q-item-label>
-            <q-item-label caption>Transfer Bytes from Change address</q-item-label>
+            <q-item-label caption>Transfer All Bytes</q-item-label>
           </q-item-section>
         </q-item>
 

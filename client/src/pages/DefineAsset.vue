@@ -32,7 +32,7 @@
         </q-card-actions>
       </q-form >
 
-      <q-banner v-if='unit' dense inline-actions class="text-white bg-green-4"> 
+      <q-banner v-if='unit' dense inline-actions class="text-white bg-green-4">
         Asset defined. Asset Unit: {{unit}}
         <template v-slot:action >
           <q-btn flat icon='cancel' @click.stop='closeOKBanner'/>
@@ -56,7 +56,7 @@ export default {
       title: 'Define Asset',
       caption: 'Please click on Define Asset button to define a new Obyte Asset. '
         + 'Remember to check that 1st address has funds. '
-        + 'If required, use Move Bytes API to transfer bytes from Change Address.',
+        + 'If required, use Move Bytes API to consolidate Bytes.',
       unit: null,
     }
   },

@@ -25,7 +25,7 @@
           </div>
         </q-card-section>
 
-        <q-card-section style='max-width: 600px' v-if=" showTotals && asset !== 'base' " >
+        <q-card-section style='max-width: 600px' v-if=" showTotals && tokensOnOtherAddresses " >
           <q-table
             :data=' tokens_in_other_addresses '
             :columns=' tokens_in_other_addresses_view '

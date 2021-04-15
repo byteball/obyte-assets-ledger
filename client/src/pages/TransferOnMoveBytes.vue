@@ -49,7 +49,7 @@ export default {
           //let message = 'Transferred. Unit: ' + response.data.unit
           //notify.success(message)
           this.unit = response.data.unit
-          this.unitURL = this.hwObyteNet + '/' + response.data.unit
+          this.unitURL = this.hwObyteNet + response.data.unit
         }
       }
       catch (err) { notify.processError(err) }

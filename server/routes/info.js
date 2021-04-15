@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     state.push({key: 'protocolversion', value: constants.version});
     state.push({key: 'alt', value: constants.alt});
     state.push({key: 'light_node', value: conf.bLight});
-    state.push({key: 'payout_address', value: conf.payout_address || 'undefined'});
+    state.push({key: 'payout_address', value: conf.payout_address || null});
     state.push({key: 'hub/relay', value: conf.hub});
     state.push({key: 'connections', value: connections.incoming + connections.outgoing});
     storage.readLastMainChainIndex(function(last_mci){
