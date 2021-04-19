@@ -4,11 +4,15 @@ Quasar front-end for obyte-assets-ledger
 
 ## Install the dependencies
 ```bash
+yarn install
+# or
 npm install
 ```
 
 ## Install Quasar
 ```bash
+yarn global add @quasar/cli
+# or
 npm install -g @quasar/cli
 ```
 

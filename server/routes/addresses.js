@@ -4,11 +4,12 @@ var headlessWallet = require('headless-obyte');
 const db = require('ocore/db');
 
 function sendError(err, status, res) {
-	console.error('Error: ', err)
+	console.error('Error:', err)
 	let error = 'Server Error'
 	if (err.message) error = err.message
 	if (typeof err === 'string' || err instanceof String ) error = err
-	res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
 
 router.get('/', async (req, res) => {

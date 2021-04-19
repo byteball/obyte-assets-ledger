@@ -32,7 +32,7 @@ export default {
       console.log('assets:', this.assets)
     }
     catch (err) {
-      console.log('error: ', err);
+      console.error('error:', err);
       notify.processError(err);
     }
   },

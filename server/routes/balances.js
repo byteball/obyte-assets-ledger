@@ -5,11 +5,12 @@ const conf = require('ocore/conf');
 var ValidationUtils = require('ocore/validation_utils.js');
 
 function sendError(err, status, res) {
-	console.error('Error: ', err)
+	console.error('Error:', err)
 	let error = 'Server Error'
 	if (err.message) error = err.message
 	if (typeof err === 'string' || err instanceof String ) error = err
-	res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
 
 router.get('/:address', async (req, res) => {
@@ -20,7 +21,7 @@ router.get('/:address', async (req, res) => {
 		var assets = await db.query(
 			`SELECT a.unit FROM assets AS a, unit_authors AS u
 			WHERE u.address = ? AND a.unit = u.unit`,
-			[firstAddress]);
+			[global.firstAddress]);
 
 		var moreAssets = conf.allowedExternalAssets.filter(unit => (unit && unit !== 'base'));
 		assets = assets.map(row => (row.unit)).concat(moreAssets.map(unit => (unit)));

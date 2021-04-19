@@ -2,6 +2,7 @@
 .idea
 .env
 .DS_Store
+temp/
 
 # lock files
 yarn.lock

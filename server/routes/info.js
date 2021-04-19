@@ -7,11 +7,12 @@ const storage = require('ocore/storage');
 const constants = require('ocore/constants');
 
 function sendError(err, status, res) {
-  console.error('Error: ', err)
+  console.error('Error:', err)
   let error = 'Server Error'
   if (err.message) error = err.message
   if (typeof err === 'string' || err instanceof String ) error = err
-  res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
 
 router.get('/', async (req, res) => {
@@ -33,8 +34,8 @@ router.get('/', async (req, res) => {
         db.query("SELECT COUNT(*) AS count_unhandled FROM unhandled_joints", function(rows){
           state.push({key: 'count_unhandled', value: rows[0].count_unhandled});
           res.send({
-            firstAddress: firstAddress,
-            changeAddress: changeAddress,
+            firstAddress: global.firstAddress,
+            changeAddress: global.changeAddress,
             state
           })
         });

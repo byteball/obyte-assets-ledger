@@ -40,7 +40,7 @@ export default {
       console.log('customers:', this.addresses)
     }
     catch (err) {
-      console.log('error: ', err);
+      console.error('error:', err);
       notify.processError(err);
     }
   },

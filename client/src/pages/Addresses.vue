@@ -50,7 +50,7 @@ export default {
       try {
         const response = await api().get('addresses/')
         if (response.status === 200) {
-          console.log('response: ', response.data )
+          console.log('response:', response.data )
           this.customers = response.data
         }
       }

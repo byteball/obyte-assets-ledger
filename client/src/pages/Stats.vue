@@ -77,7 +77,7 @@ export default {
       try {
         var asset = encodeURIComponent(this.asset)
         const response = await api().get('stats/' + asset)
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 200) {
           this.tokensIssued = response.data.tokensIssued
           this.tokensOnChangeAddress = response.data.tokensOnChangeAddress
@@ -96,7 +96,7 @@ export default {
     async moveBytes () {
       try {
         const response = await api().post('transfer/move-bytes/')
-        console.log('response: ', response)
+        console.log('response:', response)
         if (response.status === 201) {
           let message = 'Transferred. Unit: ' + response.data.unit
           notify.success(message)

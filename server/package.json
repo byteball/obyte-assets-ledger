@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "yarn ava --timeout=60s --concurrency=1 --fail-fast --verbose"
   },
   "author": "Natalie Seltzer",
   "license": "MIT",
@@ -14,6 +14,9 @@
     "express": "^4.17.1",
     "headless-obyte": "git+https://github.com/byteball/headless-obyte.git",
     "ocore": "git+https://github.com/byteball/ocore.git"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0"
   },
   "resolutions": {
     "level-rocksdb": "^4.0.0"

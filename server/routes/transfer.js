@@ -9,46 +9,45 @@ var divisibleAsset = require('ocore/divisible_asset.js');
 var ValidationUtils = require('ocore/validation_utils.js');
 
 function sendError(err, status, res) {
-	console.error('Error: ', err)
+	console.error('Error:', err)
 	let error = 'Server Error'
 	if (err.message) error = err.message
 	if (typeof err === 'string' || err instanceof String ) error = err
-	res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
 
 async function validate(data, txn, res) {
 	try {
-		if (!data.asset || !data.amount) {
+		if (!data || !data.asset || !data.amount) {
 			return sendError('Missing data. Asset and amount must be set.', 400, res)
 		}
-		else if (data.asset === 'base') {
-			return sendError('Invalid asset. Bytes cannot be transferred between addresses.', 400, res)
-		}
-		else if ( (txn === 'buy' || txn === 'sell') && !ValidationUtils.isValidAddress(data.address) ) {
-			return sendError('Invalid Address. Valid address required for buy and sell.', 400, res)
-		}
-		else if ( (txn === 'buy' || txn === 'sell') && data.address === firstAddress) {
-			return sendError('Invalid Address. Can not buy or sell with 1st Address.', 400, res)
-		}
-		else if ( txn === 'sell' && data.address === changeAddress) {
-			return sendError('Invalid Address. Can not sell from Change Address.', 400, res)
-		}
-		else if ( txn === 'move' && (!ValidationUtils.isValidAddress(data.fromAddress) || !ValidationUtils.isValidAddress(data.toAddress)) ) {
-			return sendError('Invalid Address. fromAddress and toAddress are both needed.', 400, res)
+		else if (txn !== 'buy' && txn !== 'sell' && txn !== 'move' && txn !== 'burn') {
+			return sendError('Missing data. Unknown transfer type.', 400, res)
 		}
 		else if ( !Number.isInteger(Number(data.amount)) || Number(data.amount) <= 0 ) {
 			return sendError('Invalid Amount. Amount must be integer.', 400, res)
 		}
-		else if ( txn === 'burn' ) {
-			var assetFound = await db.query(
-				`SELECT a.unit FROM assets AS a, unit_authors AS u
-				WHERE u.address = ? AND u.unit = ? AND a.unit = u.unit`,
-				[firstAddress, data.asset]);
-
-			if (assetFound.length === 0) {
-				return sendError('Invalid Asset. Not burnable asset.', 400, res)
-			}
-			else return true
+		else if (data.asset === 'base') {
+			return sendError('Invalid asset. Bytes cannot be transferred between addresses.', 400, res)
+		}
+		else if (!ValidationUtils.isValidBase64(data.asset, 44)) {
+			return sendError('Invalid asset. Asset ID is not valid.', 400, res)
+		}
+		else if ( (txn === 'buy' || txn === 'sell') && !ValidationUtils.isValidAddress(data.address) ) {
+			return sendError('Invalid Address. Valid address required for buy and sell.', 400, res)
+		}
+		else if ( (txn === 'buy' || txn === 'sell') && data.address === global.firstAddress) {
+			return sendError('Invalid Address. Can not buy or sell with 1st Address.', 400, res)
+		}
+		else if ( txn === 'sell' && data.address === global.changeAddress) {
+			return sendError('Invalid Address. Can not sell from Change Address.', 400, res)
+		}
+		else if ( txn === 'move' && (!ValidationUtils.isValidAddress(data.fromAddress) || !ValidationUtils.isValidAddress(data.toAddress)) ) {
+			return sendError('Invalid Address. fromAddress or toAddress is missing or invalid.', 400, res)
+		}
+		else if ( txn === 'move' && (data.fromAddress === global.firstAddress || data.fromAddress === global.changeAddress || data.toAddress === global.firstAddress || data.toAddress === global.changeAddress) ) {
+			return sendError('Invalid Address. Use buy or sell endpoints instead.', 400, res)
 		}
 		else return true
 	} catch (err) { return sendError(err, 500, res); }
@@ -63,9 +62,9 @@ router.post('/buy/', async (req, res) => {
 
 		let amount = Number(data.amount);
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
-			paying_addresses: [ changeAddress, firstAddress ],
-			fee_paying_addresses: [ changeAddress, firstAddress ],
-			change_address: changeAddress,
+			paying_addresses: [ global.changeAddress, global.firstAddress ],
+			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
+			change_address: global.changeAddress,
 			asset: data.asset,
 			to_address: data.address,
 			amount,
@@ -75,7 +74,7 @@ router.post('/buy/', async (req, res) => {
 				ifNotEnoughFunds: function(err) { sendError(err, 500, res) },
 				ifOk: function(objJoint, arrChains){
 					network.broadcastJoint(objJoint);
-					//console.error('objJoint: ', objJoint.unit)
+					//console.error('objJoint:', objJoint.unit)
 					res.status(201);
 					res.send( {unit: objJoint.unit.unit } )
 				}
@@ -101,10 +100,10 @@ router.post('/sell/', async (req, res) => {
 		let amount = Number(data.amount);
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
 			paying_addresses: [ data.address ],
-			fee_paying_addresses: [ changeAddress, firstAddress ],
+			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
 			change_address: data.address,
 			asset: data.asset,
-			to_address: changeAddress,
+			to_address: global.changeAddress,
 			amount,
 			signer: headlessWallet.signer,
 			callbacks: {
@@ -112,7 +111,7 @@ router.post('/sell/', async (req, res) => {
 				ifNotEnoughFunds: function(err) { sendError(err, 500, res) },
 				ifOk: function(objJoint, arrChains){
 					network.broadcastJoint(objJoint);
-					//console.error('objJoint: ', objJoint.unit)
+					//console.error('objJoint:', objJoint.unit)
 					res.status(201);
 					res.send( {unit: objJoint.unit.unit } )
 				}
@@ -131,13 +130,13 @@ router.post('/move/', async (req, res) => {
 
 		var addresses = await db.query(
 			`SELECT address FROM my_addresses
-			WHERE address_index <> 0 AND address = ?`, [data.fromAddress]);
+			WHERE address = ?`, [data.fromAddress]);
 		if (!addresses.length) return sendError('Invalid address. fromAddress must be headless wallet address', 400, res)
 
 		let amount = Number(data.amount);
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
 			paying_addresses: [ data.fromAddress ],
-			fee_paying_addresses: [ changeAddress, firstAddress ],
+			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
 			change_address: data.fromAddress,
 			asset: data.asset,
 			to_address: data.toAddress,
@@ -148,7 +147,7 @@ router.post('/move/', async (req, res) => {
 				ifNotEnoughFunds: function(err) { sendError(err, 500, res) },
 				ifOk: function(objJoint, arrChains){
 					network.broadcastJoint(objJoint);
-					//console.error('objJoint: ', objJoint.unit)
+					//console.error('objJoint:', objJoint.unit)
 					res.status(201);
 					res.send( {unit: objJoint.unit.unit } )
 				}
@@ -165,13 +164,22 @@ router.post('/burn/', async (req, res) => {
 		const valid = await validate(data, 'burn', res)
 		if (!valid) return false;
 
+		var assetFound = await db.query(
+			`SELECT a.unit FROM assets AS a, unit_authors AS u
+			WHERE u.address = ? AND u.unit = ? AND a.unit = u.unit`,
+			[global.firstAddress, data.asset]);
+
+		if (assetFound.length === 0) {
+			return sendError('Invalid Asset. Not burnable asset.', 400, res)
+		}
+
 		let amount = Number(data.amount);
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
-			paying_addresses: [ changeAddress ],
-			fee_paying_addresses: [ changeAddress, firstAddress ],
-			change_address: changeAddress,
+			paying_addresses: [ global.changeAddress ],
+			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
+			change_address: global.changeAddress,
 			asset: data.asset,
-			to_address: firstAddress,
+			to_address: global.firstAddress,
 			amount,
 			signer: headlessWallet.signer,
 			callbacks: {
@@ -179,7 +187,7 @@ router.post('/burn/', async (req, res) => {
 				ifNotEnoughFunds: function(err) { sendError(err, 500, res) },
 				ifOk: function(objJoint, arrChains){
 					network.broadcastJoint(objJoint);
-					//console.error('objJoint: ', objJoint.unit)
+					//console.error('objJoint:', objJoint.unit)
 					res.status(201);
 					res.send( {unit: objJoint.unit.unit } )
 				}
@@ -193,7 +201,7 @@ router.post('/burn/', async (req, res) => {
 router.post('/move-bytes/', async (req, res) => {
 	try {
 		headlessWallet.sendAllBytes(
-			conf.payout_address || firstAddress,
+			conf.payout_address || global.firstAddress,
 			null,
 			function(err, unit) {
 				if (err) return sendError(err, 500, res)
@@ -207,3 +215,4 @@ router.post('/move-bytes/', async (req, res) => {
 })
 
 module.exports = router;
+module.exports.validate = validate;

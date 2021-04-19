@@ -41,7 +41,7 @@ export default {
       hwURL: null,
       state_view: [
         { name: 'key', required: true, label: 'Key', align: 'left', field: 'key' },
-        { name: 'value', required: true, label: 'Value', align: 'right', field: 'value' },
+        { name: 'value', required: true, label: 'Value', align: 'right', field: 'value', format: (val, row) => `${val === null ? '(unset)' : val}` },
       ],
       state: []
     }
@@ -51,7 +51,7 @@ export default {
     async walletInfo () {
       try {
         const response = await api().get('info/')
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 200) {
           this.hwFirstAddress = response.data.firstAddress
           this.hwChangeAddress = response.data.changeAddress

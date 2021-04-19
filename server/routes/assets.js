@@ -8,11 +8,12 @@ const db = require('ocore/db');
 const conf = require('ocore/conf');
 
 function sendError(err, status, res) {
-  console.error('Error: ', err)
+  console.error('Error:', err)
   let error = 'Server Error'
   if (err.message) error = err.message
   if (typeof err === 'string' || err instanceof String ) error = err
-  res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
 
 router.get('/', async (req, res) => {
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
     var assets = await db.query(
       `SELECT a.unit FROM assets AS a, unit_authors AS u
       WHERE u.address = ? AND a.unit = u.unit`,
-      [firstAddress]);
+      [global.firstAddress]);
 
     var moreAssets = conf.allowedExternalAssets.filter(unit => (unit && unit !== 'base'));
     assets = assets.concat(moreAssets.map(unit => ({unit})));

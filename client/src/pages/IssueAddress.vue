@@ -42,7 +42,7 @@ export default {
         this.customerWalletAddress = null
         this.address = null 
         const response = await api().post('addresses/')
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 201) {
           //notify.success({ message: 'New Wallet address: ' + response.data.address });
           this.address = response.data.address

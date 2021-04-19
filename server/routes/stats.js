@@ -5,20 +5,13 @@ const conf = require('ocore/conf');
 const constants = require('ocore/constants')
 
 function sendError(err, status, res) {
-	console.error('Error: ', err)
+	console.error('Error:', err)
 	let error = 'Server Error'
 	if (err.message) error = err.message
 	if (typeof err === 'string' || err instanceof String ) error = err
-	res.status(status).send( { error: error } )
+	if (res) res.status(status).send( { error } )
+	return false;
 }
-
-/*
-var tokensIssued = asset=== 'base' ? constants.TOTAL_WHITEBYTES : await db.query(
-	`SELECT o.address, SUM(o.amount) AS amount FROM outputs AS o
-	WHERE o.asset = ? AND o.is_spent = 1 AND o.address = ?
-	GROUP BY o.asset, o.address`,
-	[asset, firstAddress] );
-*/
 
 router.get('/:asset?', async (req, res) => {
 	try {
@@ -43,7 +36,7 @@ router.get('/:asset?', async (req, res) => {
 			var assets = await db.query(
 				`SELECT a.unit FROM assets AS a, unit_authors AS u
 				WHERE u.address = ? AND a.unit = u.unit`,
-				[firstAddress]);
+				[global.firstAddress]);
 
 			var moreAssets = conf.allowedExternalAssets.filter(unit => (unit && unit !== 'base'));
 			assets = assets.map(row => (row.unit)).concat(moreAssets.map(unit => (unit)));
@@ -66,8 +59,8 @@ router.get('/:asset?', async (req, res) => {
 
 		for (i in headlessWalletOutputs) {
 			var output = headlessWalletOutputs[i]
-			if (output.address === changeAddress) tokensOnChangeAddress = output.amount
-			else if (output.address === firstAddress) tokensOnFirstAddress = output.amount
+			if (output.address === global.changeAddress) tokensOnChangeAddress = output.amount
+			else if (output.address === global.firstAddress) tokensOnFirstAddress = output.amount
 			else {
 				tokensOnOtherAddresses += output.amount
 				otherAddresses.push(output)

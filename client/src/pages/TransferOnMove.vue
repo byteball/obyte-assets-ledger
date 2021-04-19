@@ -72,12 +72,12 @@ export default {
         toAddress: this.toAddress,
         amount: this.amount
       }
-      if (this.toAddressExternal) payload.toAddress = this.toAddressExternal
+      if (this.toAddressExternal) payload.toAddress = this.toAddressExternal.trim()
       try {
         this.unit = null 
         this.unitURL = null
         const response = await api().post('transfer/move/', payload)
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 201) {
           //let message = 'Transferred. Unit: ' + response.data.unit
           //notify.success(message)

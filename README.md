@@ -20,6 +20,11 @@ curl -fsSL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
+## Install Yarn (optional, but recommended for v12)
+```bash
+npm install -g yarn
+```
+
 ## Documentation
 * [User Inteface demo](./client/README.md)
 * [Server API app](./server/README.md)

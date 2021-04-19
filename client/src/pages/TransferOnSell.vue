@@ -66,7 +66,7 @@ export default {
         this.unit = null 
         this.unitURL = null
         const response = await api().post('transfer/sell/', payload)
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 201) {
           //let message = 'Transferred. Unit: ' + response.data.unit
           //notify.success(message)

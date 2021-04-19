@@ -51,9 +51,9 @@ export default {
       this.showTotals = false
       try {
         var address = encodeURIComponent(this.address)
-        if (this.addressExternal) address = this.addressExternal
+        if (this.addressExternal) address = this.addressExternal.trim()
         const response = await api().get('balances/' + address)
-        console.log('response: ', response)
+        //console.log('response:', response)
         if (response.status === 200) {
           this.tokens_on_address = response.data
           this.showTotals = true
@@ -76,7 +76,7 @@ export default {
     addressExternal: function () {
       if (this.addressExternal) {
         this.address = null
-        if (this.addressExternal.length == 32) {
+        if (this.addressExternal.trim().length == 32) {
           this.tokenTotals()
         }
       }

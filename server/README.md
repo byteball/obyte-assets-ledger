@@ -4,6 +4,8 @@ Obyte Headless Wallet with REST JSON API
 
 ## Install the dependencies
 ```bash
+yarn install
+# or
 npm install
 ```
 ## Testnet
