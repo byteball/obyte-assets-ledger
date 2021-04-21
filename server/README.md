@@ -8,6 +8,7 @@ yarn install
 # or
 npm install
 ```
+
 ## Testnet
 Run `cp .env.testnet .env` to connect to TESTNET hub. Backup and delete the database if you already ran it on MAINNET. Wallet app for [TESTNET can be downloaded from Obyte.org](https://obyte.org/testnet) website.
 
@@ -34,16 +35,18 @@ The default configuration are loaded from conf.js files of dependencies ([ocore]
 }
 ```
 
-
 ## Start the app
 ```bash
 node server.js
 ```
 and type the passphrase and press ENTER, if prompted.
 
-## Documentation
-* [API documenation](https://natalie-seltzer.gitbook.io/obytetokens/)
+## Asset metadata registration
+All assets need to be issued in their smallest unit amounts. In order to have decimals, you will need to use `10 to a power of decimals` amount of tokens (for example, 10**8 for Bitcoin equivalent). You can register the asset ticker, decimals and description on [Obyte Token Registry](https://tokens.ooo/) (there is [testnet Token Registry](https://testnet.tokens.ooo/) too), so the asset could be proberly shown in Obyte GUI wallet app and Obyte DAG explorers. Read more about [Token Registry on Obyte blog](https://blog.obyte.org/whats-next-for-obyte-decentralized-token-registry-b87d455deeea).
 
+## Documentation
+* [Assets Ledger API documenation](https://natalie-seltzer.gitbook.io/obytetokens/)
+* [Obyte developer documenation](https://developer.obyte.org/)
 
 ## For more info on Obyte dependencies
 * [ocore](https://github.com/byteball/ocore/blob/master/README.md)
