@@ -97,7 +97,7 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Buy Tokens</q-item-label>
+            <q-item-label>Buy/Issue Tokens</q-item-label>
             <q-item-label caption>Transfer tokens to a customer</q-item-label>
           </q-item-section>
         </q-item>

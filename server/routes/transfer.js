@@ -53,7 +53,7 @@ async function validate(data, txn, res) {
 	} catch (err) { return sendError(err, 500, res); }
 }
 
-// ** Buy ** //
+// ** Buy/Issue ** //
 router.post('/buy/', async (req, res) => {
 	try {
 		const data = req.body
@@ -62,7 +62,7 @@ router.post('/buy/', async (req, res) => {
 
 		let amount = Number(data.amount);
 		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
-			paying_addresses: [ global.changeAddress, global.firstAddress ],
+			paying_addresses: data.address === global.changeAddress ? [ global.firstAddress ] : [ global.changeAddress, global.firstAddress ],
 			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
 			change_address: global.changeAddress,
 			asset: data.asset,
