@@ -42,7 +42,7 @@ node server.js
 and type the passphrase and press ENTER, if prompted.
 
 ## Asset metadata registration
-All assets need to be issued in their smallest unit amounts. In order to have decimals, you will need to use `10 to a power of decimals` amount of tokens (for example, 10**8 for Bitcoin equivalent). You can register the asset ticker, decimals and description on [Obyte Token Registry](https://tokens.ooo/) (there is [testnet Token Registry](https://testnet.tokens.ooo/) too), so the asset could be proberly shown in Obyte GUI wallet app and Obyte DAG explorers. Read more about [Token Registry on Obyte blog](https://blog.obyte.org/whats-next-for-obyte-decentralized-token-registry-b87d455deeea).
+All assets need to be issued in their smallest unit amounts. In order to have decimals, you will need to use `10 to a power of decimals` amount of tokens (for example, 10**8 for Bitcoin equivalent). You can register the asset ticker, decimals and description on [Obyte Token Registry](https://tokens.ooo/) (there is [testnet Token Registry](https://testnet.tokens.ooo/) too), so the asset could be properly shown in Obyte GUI wallet app and Obyte DAG explorers. Read more about [Token Registry on Obyte blog](https://blog.obyte.org/whats-next-for-obyte-decentralized-token-registry-b87d455deeea).
 
 ## Asset statistics
 Statistic about each token can be queried from [Stats endpoint](https://natalie-seltzer.gitbook.io/obytetokens/totals). Here are their meanings:
