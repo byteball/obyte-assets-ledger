@@ -9,7 +9,10 @@
             <wf-select-asset :required=true label='Obyte Asset Unit' :data.sync='asset'  />
           </div>
           <div class='row'>
-            <wf-select-customer :required=true label='Obyte Headless Wallet Customer Address' :data.sync='customer'  />
+            <wf-select-customer label='Obyte Headless Wallet Customer Address'
+              :data.sync='customer'  />
+            <wf-input-text label='Obyte External Customer Address' :doublewidth=true
+              :data.sync='customerExternal' />
           </div>
 
           <div class='row'>
@@ -43,10 +46,11 @@ export default {
 
   data () {
     return {
-      title: 'Transfer Tokens on Buy',
+      title: 'Transfer Tokens on Buy/Issue',
       caption: 'Please select Obyte Asset, Obyte Address, Amount and click on Buy button to send tokens to specified address.',
       asset: null,
       customer: null,
+      customerExternal: null,
       amount: null,
       hwObyteNet: `https://${(process.env.DEV ? 'testnet': '')}explorer.obyte.org/#`,
       unitURL: null,
@@ -61,6 +65,7 @@ export default {
         address: this.customer,
         amount: this.amount
       }
+      if (this.customerExternal) payload.address = this.customerExternal
       try {
         this.unit = null 
         this.unitURL = null
@@ -78,6 +83,15 @@ export default {
     closeOKBanner () {
       this.unit = null 
       this.unitURL = null
+    }
+  },
+
+  watch: {
+    customer: function () {
+      if (this.customer) this.customerExternal = null
+    },
+    customerExternal: function () {
+      if (this.customerExternal) this.customer = null
     }
   },
 

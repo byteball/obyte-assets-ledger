@@ -8,6 +8,7 @@ yarn install
 # or
 npm install
 ```
+
 ## Testnet
 Run `cp .env.testnet .env` to connect to TESTNET hub. Backup and delete the database if you already ran it on MAINNET. Wallet app for [TESTNET can be downloaded from Obyte.org](https://obyte.org/testnet) website.
 
@@ -34,16 +35,30 @@ The default configuration are loaded from conf.js files of dependencies ([ocore]
 }
 ```
 
-
 ## Start the app
 ```bash
 node server.js
 ```
 and type the passphrase and press ENTER, if prompted.
 
-## Documentation
-* [API documenation](https://natalie-seltzer.gitbook.io/obytetokens/)
+## Asset metadata registration
+All assets need to be issued in their smallest unit amounts. In order to have decimals, you will need to use `10 to a power of decimals` amount of tokens (for example, 10**8 for Bitcoin equivalent). You can register the asset ticker, decimals and description on [Obyte Token Registry](https://tokens.ooo/) (there is [testnet Token Registry](https://testnet.tokens.ooo/) too), so the asset could be properly shown in Obyte GUI wallet app and Obyte DAG explorers. Read more about [Token Registry on Obyte blog](https://blog.obyte.org/whats-next-for-obyte-decentralized-token-registry-b87d455deeea).
 
+## Asset statistics
+Statistic about each token can be queried from [Stats endpoint](https://natalie-seltzer.gitbook.io/obytetokens/totals). Here are their meanings:
+* **Tokens in merchant wallet:** `tokensOnChangeAddress`
+* **Tokens in clients wallets:** `tokensOnOtherAddresses`
+* **Tokens in external wallets:** `tokensOnExternalAddreses`
+* **Tokens issued:** `tokensIssued`
+* **Tokens burned:** `tokensOnFirstAddress`
+* **Total supply:** `tokensIssued-tokensOnFirstAddress`
+* **Circulating supply:** `tokensIssued-tokensOnFirstAddress-tokensOnChangeAddress`
+
+Coin listing websites require machine readable Total Supply and Circulating Supply, it is recommended to make these 2 numbers (with correct amount of decimals) available at `DOMAINNAME/total_supply.txt` and `DOMAINNAME/circulating_supply.txt`.
+
+## Documentation
+* [Assets Ledger API documenation](https://natalie-seltzer.gitbook.io/obytetokens/)
+* [Obyte developer documenation](https://developer.obyte.org/)
 
 ## For more info on Obyte dependencies
 * [ocore](https://github.com/byteball/ocore/blob/master/README.md)

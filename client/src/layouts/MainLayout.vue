@@ -97,7 +97,7 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Buy Tokens</q-item-label>
+            <q-item-label>Buy/Issue Tokens</q-item-label>
             <q-item-label caption>Transfer tokens to a customer</q-item-label>
           </q-item-section>
         </q-item>
@@ -189,16 +189,28 @@ import EssentialLink from 'components/EssentialLink.vue'
 
 const linksData = [
   {
-    title: 'API Docs',
+    title: 'Asset Ledger API Docs',
     caption: 'Obyte tokens API Docs',
     icon: 'school',
     link: 'https://natalie-seltzer.gitbook.io/obytetokens/'
+  },
+  {
+    title: 'Obyte Token Registry',
+    caption: 'tokens.ooo',
+    icon: 'app_registration',
+    link: `https://${(process.env.DEV ? 'testnet.': '')}tokens.ooo`
   },
   {
     title: 'Obyte on GitHub',
     caption: 'github.com/byteball',
     icon: 'code',
     link: 'https://github.com/byteball'
+  },
+  {
+    title: 'Obyte developer docs',
+    caption: 'developer.obyte.org',
+    icon: 'book',
+    link: 'https://developer.obyte.org/'
   },
   {
     title: 'Obyte Discord community',
