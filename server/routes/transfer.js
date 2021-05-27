@@ -19,7 +19,10 @@ function sendError(err, status, res) {
 
 async function validate(data, txn, res) {
 	try {
-		if (!data || !data.asset || !data.amount) {
+		if (!global.firstAddress || !global.changeAddress) {
+			throw Error('Wallet is locked. Enter passphrase in console.');
+		}
+		else if (!data || !data.asset || !data.amount) {
 			return sendError('Missing data. Asset and amount must be set.', 400, res)
 		}
 		else if (txn !== 'buy' && txn !== 'sell' && txn !== 'move' && txn !== 'burn') {
@@ -200,6 +203,9 @@ router.post('/burn/', async (req, res) => {
 // ** Move Bytes ** //
 router.post('/move-bytes/', async (req, res) => {
 	try {
+		if (!global.firstAddress || !global.changeAddress) {
+			throw Error('Wallet is locked. Enter passphrase in console.');
+		}
 		headlessWallet.sendAllBytes(
 			conf.payout_address || global.firstAddress,
 			null,

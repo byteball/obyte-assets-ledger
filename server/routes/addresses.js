@@ -25,6 +25,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    if (!global.firstAddress || !global.changeAddress) {
+      throw Error('Wallet is locked. Enter passphrase in console.');
+    }
     const nextAddress = await headlessWallet.issueNextMainAddress();
     res.status(201);
     res.send({ address: nextAddress })

@@ -4,10 +4,14 @@
 
     <div >
       <div class='row'>
-        Headless Wallet First Address:&nbsp;<a :href="hwObyteNet + hwFirstAddress" target="_blank">{{hwFirstAddress}}</a>
+        Headless Wallet First Address:&nbsp;
+        <span v-if="hwChangeAddress"><a :href="hwObyteNet + hwFirstAddress" target="_blank">{{hwFirstAddress}}</a></span>
+        <span v-else>(wallet is locked)</span>
       </div>
       <div class='row'>
-        Headless Wallet Change Address:&nbsp;<a :href="hwObyteNet + hwChangeAddress" target="_blank">{{hwChangeAddress}}</a>
+        Headless Wallet Change Address:&nbsp;
+        <span v-if="hwChangeAddress"><a :href="hwObyteNet + hwChangeAddress" target="_blank">{{hwChangeAddress}}</a></span>
+        <span v-else>(wallet is locked)</span>
       </div>
 
       <q-card-section style='max-width: 600px'>
