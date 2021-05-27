@@ -2,8 +2,8 @@ const app = require('./startup/app');
 
 var headlessWallet = require('headless-obyte');
 var eventBus = require('ocore/event_bus');
-global.firstAddress = global.firstAddress || null;
-global.changeAddress = global.firstAddress || null;
+global.firstAddress = global.firstAddress || null; // value can be already set from tests
+global.changeAddress = global.firstAddress || null; // value can be already set from tests
 
 // ** headless wallet is ready Event ** //
 eventBus.once('headless_wallet_ready', async () => {

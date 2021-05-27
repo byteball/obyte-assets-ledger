@@ -34,6 +34,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    if (!global.firstAddress || !global.changeAddress) {
+      throw Error('Wallet is locked. Enter passphrase in console.');
+    }
     var callbacks = composer.getSavingCallbacks({
       ifError: function(err){ sendError(err, 500, res) },
       ifNotEnoughFunds: function(err){ sendError(err, 500, res) },
