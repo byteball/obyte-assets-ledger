@@ -19,8 +19,8 @@ router.get('/', async (req, res) => {
 	try {
 		var state = [];
 		var connections = network.getConnectionStatus();
-		state.push({key: 'version', value: constants.minCoreVersion});
 		state.push({key: 'version', value: conf.bLight ? constants.minCoreVersion : minCoreVersionForFullNodes});
+		state.push({key: 'subversion', value: conf.program +' '+ conf.program_version});
 		state.push({key: 'protocolversion', value: constants.version});
 		state.push({key: 'alt', value: constants.alt});
 		state.push({key: 'light_node', value: conf.bLight});
