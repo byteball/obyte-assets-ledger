@@ -13,26 +13,26 @@ function sendError(err, status, res) {
 }
 
 router.get('/', async (req, res) => {
-  try {
-    var addresses = await db.query(
-      `SELECT address, creation_date, address_index FROM my_addresses
-      WHERE address_index <> 0
-      ORDER BY address_index ASC`);
-    res.send(addresses)
-  }
-  catch (err) { return sendError(err, 500, res) }
+	try {
+		var addresses = await db.query(
+			`SELECT address, creation_date, address_index FROM my_addresses
+			WHERE address_index <> 0
+			ORDER BY address_index ASC`);
+		res.send(addresses)
+	}
+	catch (err) { return sendError(err, 500, res) }
 });
 
 router.post('/', async (req, res) => {
-  try {
-    if (!global.firstAddress || !global.changeAddress) {
-      throw Error('Wallet is locked. Enter passphrase in console.');
-    }
-    const nextAddress = await headlessWallet.issueNextMainAddress();
-    res.status(201);
-    res.send({ address: nextAddress })
-  }
-  catch (err) { return sendError(err, 500, res) }
+	try {
+		if (!global.firstAddress || !global.changeAddress) {
+			throw Error('Wallet is locked. Enter passphrase in console.');
+		}
+		const nextAddress = await headlessWallet.issueNextMainAddress();
+		res.status(201);
+		res.send({ address: nextAddress })
+	}
+	catch (err) { return sendError(err, 500, res) }
 })
 
 module.exports = router;
