@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
 			spender_attested: false
 		}
 
-		composer.composeAssetDefinitionJoint(firstAddress, asset, headlessWallet.signer, callbacks);
+		composer.composeAssetDefinitionJoint(global.firstAddress, asset, headlessWallet.signer, callbacks);
 	}
 	catch (err) { return sendError(err, 500, res) }
 })
