@@ -21,5 +21,5 @@ exports.from_email = '';
 //exports.socksPort = 9050;
 
 // consolidate unspent outputs when there are too many of them, value of 0 means do not try to consolidate.
-exports.MAX_UNSPENT_OUTPUTS = 100;
-exports.CONSOLIDATION_INTERVAL = 3600*1000;
+exports.MAX_UNSPENT_OUTPUTS = 50;
+exports.CONSOLIDATION_INTERVAL = 1800*1000;

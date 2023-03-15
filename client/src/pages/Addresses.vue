@@ -3,7 +3,6 @@
     <wf-title :title='title' :caption='caption' />
 
     <div >
-
       <q-card-section style='max-width: 800px' >
         <q-table
           :data=' customers '

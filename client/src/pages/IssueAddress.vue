@@ -47,6 +47,9 @@ export default {
           //notify.success({ message: 'New Wallet address: ' + response.data.address });
           this.address = response.data.address
         }
+        else {
+          notify.processError(response.data.error)
+        }
       }
       catch (err) { notify.processError(err) }
     },

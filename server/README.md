@@ -30,8 +30,7 @@ The default configuration are loaded from conf.js files of dependencies ([ocore]
 	"from_email": "test@example.com", // email address to send notification from
 	"admin_email": "test@example.com", // email address where to send check_daemon.js notifications
 	"socksHost": "127.0.0.1", // TOR proxy address
-	"socksPort": 9050, // port for TOR proxy
-	"MAX_UNSPENT_OUTPUTS": 0 // disables Bytes consolidation to change address (default: 100)
+	"socksPort": 9050 // port for TOR proxy
 }
 ```
 
@@ -43,6 +42,14 @@ and type the passphrase and press ENTER, if prompted.
 
 ## Asset metadata registration
 All assets need to be issued in their smallest unit amounts. In order to have decimals, you will need to use `10 to a power of decimals` amount of tokens (for example, 10**8 for Bitcoin equivalent). You can register the asset ticker, decimals and description on [Obyte Token Registry](https://tokens.ooo/) (there is [testnet Token Registry](https://testnet.tokens.ooo/) too), so the asset could be properly shown in Obyte GUI wallet app and Obyte DAG explorers. Read more about [Token Registry on Obyte blog](https://blog.obyte.org/whats-next-for-obyte-decentralized-token-registry-b87d455deeea).
+
+## Maintenance
+Bytes are already consolidated from all addresses to first change address, but custom assets need to be consolidated per address basis.
+
+Run this command in crontab every 15 minutes to consolidate UTXOs of first change address or run manually when needed (over 100 UTXOs) for any other address:
+```bash
+curl -s 'http://localhost:8081/transfer/consolidate' --data-raw '{"asset":"ASSET_ID","address":"CHANGE_ADDRESS"}'
+```
 
 ## Asset statistics
 Statistic about each token can be queried from [Stats endpoint](https://natalie-seltzer.gitbook.io/obytetokens/totals). Here are their meanings:

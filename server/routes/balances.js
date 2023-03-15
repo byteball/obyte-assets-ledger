@@ -28,7 +28,7 @@ router.get('/:address', async (req, res) => {
 		assets = assets.filter((v,i,a)=>a.indexOf(v)===i);
 
 		var balances = await db.query(
-			`SELECT asset, SUM(amount) AS amount FROM outputs
+			`SELECT asset, SUM(amount) AS amount, COUNT(*) as utxo FROM outputs
 			WHERE address = ? AND is_spent = 0
 				AND asset IN (${assets.map(db.escape).join(', ')})
 			GROUP BY asset`, [address] );

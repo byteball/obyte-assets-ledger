@@ -1,6 +1,7 @@
 <template>
   <q-page class=" q-pa-md " >
     <wf-title :title='title' :caption='caption' />
+
     <div >
       <q-form @submit.prevent.stop='submitForm' >
         <q-card-section>
@@ -57,6 +58,9 @@ export default {
           //notify.success(message)
           this.unit = response.data.unit
           this.unitURL = this.hwObyteNet + response.data.unit
+        }
+        else {
+          notify.processError(response.data.error)
         }
       }
       catch (err) { notify.processError(err) }
