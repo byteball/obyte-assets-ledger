@@ -53,7 +53,8 @@ async function validate(data, txn, res) {
 			return sendError('Invalid Address. Use buy or sell endpoints instead.', 400, res)
 		}
 		else return true
-	} catch (err) { return sendError(err, 500, res); }
+	}
+	catch (err) { return sendError(err, 500, res) }
 }
 
 // ** Buy/Issue ** //
@@ -84,8 +85,7 @@ router.post('/buy/', async (req, res) => {
 			}
 		});
 	}
-	catch (err) {
-		return sendError(err, 500, res) }
+	catch (err) { return sendError(err, 500, res) }
 })
 
 // ** Sell ** //
@@ -183,6 +183,62 @@ router.post('/burn/', async (req, res) => {
 			change_address: global.changeAddress,
 			asset: data.asset,
 			to_address: global.firstAddress,
+			amount,
+			signer: headlessWallet.signer,
+			callbacks: {
+				ifError: function(err) { sendError(err, 500, res) },
+				ifNotEnoughFunds: function(err) { sendError(err, 500, res) },
+				ifOk: function(objJoint, arrChains){
+					network.broadcastJoint(objJoint);
+					//console.error('objJoint:', objJoint.unit)
+					res.status(201);
+					res.send( {unit: objJoint.unit.unit } )
+				}
+			}
+		});
+	}
+	catch (err) { return sendError(err, 500, res) }
+})
+
+// ** Consolidate ** //
+router.post('/consolidate/', async (req, res) => {
+	try {
+		if (!global.firstAddress || !global.changeAddress) {
+			throw Error('Wallet is locked. Enter passphrase in console.');
+		}
+		const data = req.body
+		if (!data || !data.asset || !data.address) {
+			return sendError('Missing data. Asset and address must be set.', 400, res)
+		}
+		else if (data.asset === 'base') {
+			return sendError('Invalid asset. Bytes are automatically consolidated.', 400, res)
+		}
+		else if (!ValidationUtils.isValidBase64(data.asset, 44)) {
+			return sendError('Invalid asset. Asset ID is not valid.', 400, res)
+		}
+		else if (!ValidationUtils.isValidAddress(data.address)) {
+			return sendError('Invalid Address. Valid address required.', 400, res)
+		}
+
+		var addresses = await db.query(
+			`SELECT address FROM my_addresses
+			WHERE address = ?`, [data.address]);
+		if (!addresses.length) return sendError('Invalid address. address must be headless wallet address', 400, res)
+
+		var balances = await db.query(
+			`SELECT amount FROM outputs
+			WHERE address = ? AND is_spent = 0 AND asset = ?
+			ORDER BY amount DESC LIMIT 100`, [data.address, data.asset] );
+		if (!balances.length || balances.length <= conf.MAX_UNSPENT_OUTPUTS) return sendError('Not enought UTXOs.', 200, res)
+
+		var amount = balances.reduce((sum, output) => sum + output.amount, 0);
+
+		divisibleAsset.composeAndSaveDivisibleAssetPaymentJoint({
+			paying_addresses: [ data.address ],
+			fee_paying_addresses: [ global.changeAddress, global.firstAddress ],
+			change_address: data.address,
+			asset: data.asset,
+			to_address: data.address,
 			amount,
 			signer: headlessWallet.signer,
 			callbacks: {

@@ -1,6 +1,7 @@
 <template>
   <q-page class=" q-pa-md " >
     <wf-title :title='title' :caption='caption' />
+
     <div >
       <q-form @submit.prevent.stop='submitForm' >
         <q-card-section>
@@ -100,6 +101,9 @@ export default {
         if (response.status === 201) {
           let message = 'Transferred. Unit: ' + response.data.unit
           notify.success(message)
+        }
+        else {
+          notify.processError(response.data.error)
         }
       }
       catch (err) { notify.processError(err) }

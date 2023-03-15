@@ -76,9 +76,11 @@ export default {
           this.unit = response.data.unit
           this.unitURL = this.hwObyteNet + response.data.unit
         }
+        else {
+          notify.processError(response.data.error)
+        }
       }
-      catch (err) {
-        notify.processError(err) }
+      catch (err) { notify.processError(err) }
     },
     closeOKBanner () {
       this.unit = null 

@@ -71,9 +71,11 @@ export default {
           //notify.success(message)
           this.unit = response.data.unit
         }
+        else {
+          notify.processError(response.data.error)
+        }
       }
-      catch (err) {
-        notify.processError(err) }
+      catch (err) { notify.processError(err) }
     },
 
     closeOKBanner () {
