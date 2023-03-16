@@ -48,7 +48,7 @@ Bytes are already consolidated from all addresses to first change address, but c
 
 Run this command in crontab every 15 minutes to consolidate UTXOs of first change address or run manually when needed (over 100 UTXOs) for any other address:
 ```bash
-curl -s 'http://localhost:8081/transfer/consolidate' --data-raw '{"asset":"ASSET_ID","address":"CHANGE_ADDRESS"}'
+curl -s 'http://localhost:8081/transfer/consolidate' -H "Content-Type: application/json" --data-raw '{"asset":"ASSET_ID","address":"CHANGE_ADDRESS"}'
 ```
 
 ## Asset statistics
